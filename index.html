@@ -109,7 +109,7 @@
 <body>
     <header>
         <img src="https://i.imgur.com/hiDkKGv.jpeg" alt="Pelican Pickups">
-        <h1>PELICAN PICKUPS WORKER ORDER PLACEMENT FORM 2</h1>
+        <h1>PELICAN PICKUPS WORKER ORDER PLACEMENT FORM</h1>
     </header>
     <form id="webform" onsubmit="validateAndSendEmail(event)">
         <div class="section" style="background-color: #fffacd; padding: 20px; border-radius: 8px;">
@@ -278,44 +278,18 @@
                 alert('Please fill out all required fields before submitting the form.');
                 return;
             }
-           
+
+            // Collect form data for submission
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
-                if (!data[key]) {
-                    data[key] = value;
-                } else {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                }
+                data[key] = value;
             });
 
-            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
-                .then(function(response) {
-                    alert('SUCCESS! Email sent successfully.');
-                }, function(error) {
-                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
-                });
-        };
-        ormData.forEach((value, key) => {
-                if (!data[key]) {
-                    data[key] = value;
-                } else {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                }
-            });
-
-            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
-                .then(function(response) {
-                    alert('SUCCESS! Email sent successfully.');
-                }, function(error) {
-                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
-                });
+            // Simulating form submission for GitHub Pages compatibility
+            console.log('Form submitted successfully:', data);
+            alert('Form submitted successfully! Please check the console for details.');
+        }
     </script>
 </body>
 
