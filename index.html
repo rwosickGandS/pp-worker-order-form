@@ -152,36 +152,45 @@
 
         <div class="section">
             <h2>Billing Info</h2>
-            <div class="field">
-                <label>Company Name: <input type="text" name="company_name"></label>
-            </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> First Name: <input type="text" name="first_name" required></label>
-            </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> Last Name: <input type="text" name="last_name" required></label>
-            </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> Email: <input type="email" name="email" required></label>
-            </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> Phone: <input type="tel" name="phone" required></label>
-            </div>
             <div class="field" style="margin-top: 5px; display: flex; align-items: center; background-color: #e9ecef; padding: 5px; border-radius: 4px;">
-                <label for="same_as_service" style="margin-right: 2px; white-space: nowrap;">Same as Service Address:</label>
-                <input type="checkbox" id="same_as_service" onclick="copyServiceAddress()" style="transform: scale(1.2);">
-            </div>                      
-            <div class="field full-width">
-                <label><span style="color: red;">*</span> Billing Address: <input type="text" name="billing_address" required></label>
+                <label for="simple_billing" style="margin-right: 2px; white-space: nowrap;">Is This A Repeat Customer:</label>
+                <input type="checkbox" id="simple_billing" onclick="toggleBillingInfo()" style="transform: scale(1.2);">
             </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> Billing City: <input type="text" name="billing_city" required></label>
+            <div id="billing-info-fields">
+                <div class="field">
+                    <label>Company Name: <input type="text" name="company_name"></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> First Name: <input type="text" name="first_name" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> Last Name: <input type="text" name="last_name" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> Email: <input type="email" name="email" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> Phone: <input type="tel" name="phone" required></label>
+                </div>
+                <div class="field" style="margin-top: 5px; display: flex; align-items: center; background-color: #e9ecef; padding: 5px; border-radius: 4px;">
+                    <label for="same_as_service" style="margin-right: 2px; white-space: nowrap;">Same as Service Address:</label>
+                    <input type="checkbox" id="same_as_service" onclick="copyServiceAddress()" style="transform: scale(1.2);">
+                </div>                      
+                <div class="field full-width">
+                    <label><span style="color: red;">*</span> Billing Address: <input type="text" name="billing_address" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> Billing City: <input type="text" name="billing_city" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> State/Province: <input type="text" name="billing_state" value="NC" required></label>
+                </div>
+                <div class="field">
+                    <label><span style="color: red;">*</span> Zip/Postal Code: <input type="text" name="billing_zip" required></label>
+                </div>
             </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> State/Province: <input type="text" name="billing_state" value="NC" required></label>
-            </div>
-            <div class="field">
-                <label><span style="color: red;">*</span> Zip/Postal Code: <input type="text" name="billing_zip" required></label>
+            <div id="customer-name-field" class="field full-width" style="display: none;">
+                <label><span style="color: red;">*</span> Customer Name: <input type="text" name="customer_name"></label>
             </div>
         </div>
 
@@ -272,48 +281,62 @@
         }
 
         function validateAndSendEmail(event) {
-        event.preventDefault();
-        const form = document.getElementById('webform');
-        if (!form.checkValidity()) {
-            alert('Please fill out all required fields before submitting the form.');
-            return;
+            event.preventDefault();
+            const form = document.getElementById('webform');
+            if (!form.checkValidity()) {
+                alert('Please fill out all required fields before submitting the form.');
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(form);
+            const params = {
+                user_id: "vpO53IoBm8UmCsWf-",
+                service_id: "service_e2doz5s",
+                template_id: "template_e9tcf1c",
+                template_params: {}
+            };
+
+            formData.forEach((value, key) => {
+                params.template_params[key] = value;
+            });
+
+            const headers = {
+                'Content-type': 'application/json',
+            };
+
+            const options = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(params),
+            };
+
+            fetch('https://api.emailjs.com/api/v1.0/email/send', options)
+                .then((response) => {
+                    if (response.ok) {
+                        alert('Order Sent to Evette.');
+                    } else {
+                        return response.text().then((text) => Promise.reject(text));
+                    }
+                })
+                .catch((error) => {
+                    alert('FAILED! Text or Call Ryan. ' + error);
+                });
         }
 
-        // Collect form data
-        const formData = new FormData(form);
-        const params = {
-            user_id: "vpO53IoBm8UmCsWf-",
-            service_id: "service_e2doz5s",
-            template_id: "template_e9tcf1c",
-            template_params: {}
-        };
+        function toggleBillingInfo() {
+            const isChecked = document.getElementById('simple_billing').checked;
+            const billingInfoFields = document.getElementById('billing-info-fields');
+            const customerNameField = document.getElementById('customer-name-field');
 
-        formData.forEach((value, key) => {
-            params.template_params[key] = value;
-        });
-
-        const headers = {
-            'Content-type': 'application/json',
-        };
-
-        const options = {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(params),
-        };
-
-        fetch('https://api.emailjs.com/api/v1.0/email/send', options)
-            .then((response) => {
-                if (response.ok) {
-                    alert('Order Sent to Evette.');
-                } else {
-                    return response.text().then((text) => Promise.reject(text));
-                }
-            })
-            .catch((error) => {
-                alert('FAILED! Text or Call Ryan. ' + error);
-            });
-    }
+            if (isChecked) {
+                billingInfoFields.style.display = 'none';
+                customerNameField.style.display = 'block';
+            } else {
+                billingInfoFields.style.display = 'block';
+                customerNameField.style.display = 'none';
+            }
+        }
     </script>
 </body>
 
