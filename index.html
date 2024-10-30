@@ -1,10 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pelican Pickups Work Order Placement Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,16 +85,11 @@
             background-color: #1a252f;
         }
     </style>
-    </script>
-<script type="text/javascript">
-(function(){
-  emailjs.init('vpO53IoBm8UmCsWf-');
-</script>
 </head>
 <body>
     <header>
         <img src="https://i.imgur.com/hiDkKGv.jpeg" alt="Pelican Pickups">
-        <h3>PELICAN PICKUPS WORKER ORDER PLACEMENT FORM</h3>
+        <h1>PELICAN PICKUPS WORKER ORDER PLACEMENT FORM</h1>
     </header>
     <form id="webform" onsubmit="validateAndSendEmail(event)">
         <div class="section" style="background-color: #fffacd; padding: 20px; border-radius: 8px;">
@@ -190,7 +185,7 @@
                 <label>Customer Comments (seen by customer): <textarea name="customer_comments"></textarea></label>
             </div>
             <div class="field full-width">
-                <label>Internal Notes (not seen by customer): <textarea name="internal_notes"></textarea></label>
+                <label>Internal Notes: <textarea name="internal_notes"></textarea></label>
             </div>
             <div class="field">
                 <label>General Discount: <input type="number" name="general_discount"></label>
@@ -234,43 +229,42 @@
                 alert('Please fill out all required fields before submitting the form.');
                 return;
             }
+
+            // Collect form data
             const formData = new FormData(form);
-            const data = {};
+            const params = {
+                user_id: "vpO53IoBm8UmCsWf-",
+                service_id: "service_e2doz5s",
+                template_id: "template_e9tcf1c",
+                template_params: {}
+            };
+
             formData.forEach((value, key) => {
-                if (!data[key]) {
-                    data[key] = value;
-                } else {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                }
+                params.template_params[key] = value;
             });
 
-            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
-                .then(function(response) {
-                    alert('SUCCESS! Email sent successfully.');
-                }, function(error) {
-                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
-                });
-        };
-            formData.forEach((value, key) => {
-                if (!data[key]) {
-                    data[key] = value;
-                } else {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                }
-            });
+            const headers = {
+                'Content-type': 'application/json',
+            };
 
-            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
-                .then(function(response) {
-                    alert('SUCCESS! Email sent successfully.');
-                }, function(error) {
-                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
+            const options = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(params),
+            };
+
+            fetch('https://api.emailjs.com/api/v1.0/email/send', options)
+                .then((response) => {
+                    if (response.ok) {
+                        alert('SUCCESS! Email sent successfully.');
+                    } else {
+                        return response.text().then((text) => Promise.reject(text));
+                    }
+                })
+                .catch((error) => {
+                    alert('FAILED! Email could not be sent. ' + error);
                 });
+        }
     </script>
 </body>
 </html>
