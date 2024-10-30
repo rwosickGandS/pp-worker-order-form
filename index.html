@@ -278,9 +278,44 @@
                 alert('Please fill out all required fields before submitting the form.');
                 return;
             }
+           
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
 
-            // Collect form data and send via email (emailjs integration as in your original code)
-        }
+            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
+                .then(function(response) {
+                    alert('SUCCESS! Email sent successfully.');
+                }, function(error) {
+                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
+                });
+        };
+        ormData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
+
+            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
+                .then(function(response) {
+                    alert('SUCCESS! Email sent successfully.');
+                }, function(error) {
+                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
+                });
     </script>
 </body>
 
