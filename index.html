@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelican Pickups Work Order Placement Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 8px;
+        }
+        header h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-top: 15px;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            background-color: #4d0d0d;
+            color: white;
+            padding: 10px;
+            margin: 0;
+            border-radius: 4px;
+        }
+        .field {
+            width: 48%;
+            margin: 10px 1%;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .field input, .field textarea, .field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            border-color: #2c3e50;
+            outline: none;
+        }
+        .full-width {
+            width: 98%;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        button {
+            padding: 15px 30px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+    </style>
+    </script>
+<script type="text/javascript">
+(function(){
+  emailjs.init({
+    publicKey: "vpO53IoBm8UmCsWf-",
+  });
+})();
+</script>
+</head>
+<body>
+    <header>
+        <img src="https://i.imgur.com/hiDkKGv.jpeg" alt="Pelican Pickups">
+        <h3>PELICAN PICKUPS WORKER ORDER PLACEMENT FORM</h3>
+    </header>
+    <form id="webform" onsubmit="validateAndSendEmail(event)">
+        <div class="section" style="background-color: #fffacd; padding: 20px; border-radius: 8px;">
+            <label for="worker_placing_order"><span style="color: red;">*</span> Worker Placing Order:</label>
+            <select name="worker_placing_order" id="worker_placing_order" required>
+                <option value="">Select a worker</option>
+                <option value="Will Bumgarner">Will Bumgarner</option>
+                <option value="Jake Wosick">Jake Wosick</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="section">
+            <h2>Service Address</h2>
+            <div class="field">
+                <label><span style="color: red;">*</span> Address: <input type="text" name="service_address" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> City: <input type="text" name="service_city" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> State/Province: <input type="text" name="service_state" value="NC" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Zip/Postal Code: <input type="text" name="service_zip" required></label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Billing Info</h2>
+            <div class="field">
+                <label>Company Name: <input type="text" name="company_name"></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> First Name: <input type="text" name="first_name" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Last Name: <input type="text" name="last_name" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Email: <input type="email" name="email" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Phone: <input type="tel" name="phone" required></label>
+            </div>
+            <div class="field" style="margin-top: 5px; display: flex; align-items: center; background-color: #e9ecef; padding: 5px; border-radius: 4px;">
+                <label for="same_as_service" style="margin-right: 2px; white-space: nowrap;">Same as Service Address:</label>
+                <input type="checkbox" id="same_as_service" onclick="copyServiceAddress()" style="transform: scale(1.2);">
+            </div>                      
+            <div class="field full-width">
+                <label><span style="color: red;">*</span> Billing Address: <input type="text" name="billing_address" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Billing City: <input type="text" name="billing_city" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> State/Province: <input type="text" name="billing_state" value="NC" required></label>
+            </div>
+            <div class="field">
+                <label><span style="color: red;">*</span> Zip/Postal Code: <input type="text" name="billing_zip" required></label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Options</h2>
+            <div class="field full-width">
+                <label>Description of Dumping: <textarea name="dumping_description"></textarea></label>
+            </div>
+            
+            <div class="field">
+                <label><span style="color: red;">*</span> Industry Type: 
+                    <select name="industry_type" required>
+                        <option value="">Select an industry</option>
+                        <option value="Commercial Contractor">Commercial Contractor</option>
+                        <option value="Demolition">Demolition</option>
+                        <option value="Fire/Water Restoration">Fire/Water Restoration</option>
+                        <option value="Homeowner">Homeowner</option>
+                        <option value="Landscape/Excavation">Landscape/Excavation</option>
+                        <option value="New Home Builder">New Home Builder</option>
+                        <option value="Property Management">Property Management</option>
+                        <option value="Remodeler">Remodeler</option>
+                        <option value="Residential Contractor">Residential Contractor</option>
+                        <option value="Roofer">Roofer</option>
+                        <option value="Windows/Siding">Windows/Siding</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Other</h2>
+            <div class="field full-width">
+                <label>Customer Comments (seen by customer): <textarea name="customer_comments"></textarea></label>
+            </div>
+            <div class="field full-width">
+                <label>Internal Notes (not seen by customer): <textarea name="internal_notes"></textarea></label>
+            </div>
+            <div class="field">
+                <label>General Discount: <input type="number" name="general_discount"></label>
+            </div>
+            <div class="field">
+                <label>Delivery: <input type="text" name="delivery"></label>
+            </div>
+            <div class="field">
+                <label>Coupon Code: <input type="text" name="coupon_code"></label>
+            </div>
+            <div class="field">
+                <label>Miscellaneous Fees: <input type="text" name="misc_fees" style="width: 100%; padding: 8px; box-sizing: border-box;"></label>
+            </div>
+        </div>
+
+        <div class="section">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <script>
+        function copyServiceAddress() {
+            if (document.getElementById('same_as_service').checked) {
+                document.querySelector('input[name="billing_address"]').value = document.querySelector('input[name="service_address"]').value;
+                document.querySelector('input[name="billing_city"]').value = document.querySelector('input[name="service_city"]').value;
+                document.querySelector('input[name="billing_state"]').value = document.querySelector('input[name="service_state"]').value;
+                document.querySelector('input[name="billing_zip"]').value = document.querySelector('input[name="service_zip"]').value;
+            } else {
+                document.querySelector('input[name="billing_address"]').value = "";
+                document.querySelector('input[name="billing_city"]').value = "";
+                document.querySelector('input[name="billing_state"]').value = "NC";
+                document.querySelector('input[name="billing_zip"]').value = "";
+            }
+        }
+    </script>
+
+    <script>
+        function validateAndSendEmail(event) {
+            event.preventDefault();
+            const form = document.getElementById('webform');
+            if (!form.checkValidity()) {
+                alert('Please fill out all required fields before submitting the form.');
+                return;
+            }
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
+
+            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
+                .then(function(response) {
+                    alert('SUCCESS! Email sent successfully.');
+                }, function(error) {
+                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
+                });
+        };
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
+
+            emailjs.send("service_e2doz5s", "template_e9tcf1c", data)
+                .then(function(response) {
+                    alert('SUCCESS! Email sent successfully.');
+                }, function(error) {
+                    alert('FAILED! Email could not be sent.' + JSON.stringify(error));
+                });
+    </script>
+</body>
+</html>
