@@ -121,6 +121,16 @@
                 <option value="Other">Other</option>
             </select>
         </div>
+
+        <!-- Dumpster Size -->
+        <div class="section" style="background-color: #fffacd; padding: 20px; border-radius: 8px;">
+            <label for="dumpster_size"><span style="color: red;">*</span> Dumpster Size:</label>
+            <select name="dumpster_size" id="dumpster_size" required>
+                <option value="">Select dumpster size</option>
+                <option value="15 Yards">15 Yards</option>
+                <option value="21 Yards">21 Yards</option>
+            </select>
+        </div>
         
         <!-- Delivery Date -->
         <div class="field">
@@ -230,10 +240,7 @@
                 <label>Internal Notes: <textarea name="internal_notes"></textarea></label>
             </div>
             <div class="field">
-                <label>General Discount: <input type="number" name="general_discount"></label>
-            </div>
-            <div class="field">
-                <label>Delivery: <input type="text" name="delivery"></label>
+                <label>Amount of Discount Given: <input type="number" name="general_discount"></label>
             </div>
             <div class="field">
                 <label>Coupon Code: <input type="text" name="coupon_code"></label>
